@@ -41,6 +41,24 @@
 
         <TabControl Grid.Row="2" Grid.Column="1">
             <TabItem Header="Main"></TabItem>
+
+            <TabItem Header="Students" Height="20" VerticalAlignment="Bottom">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="7*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Column="0" Header="Группы">
+                        <ListBox ItemsSource="{Binding Groups}" DisplayMemberPath="Name"/>
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Header="Студенты">
+                        <DataGrid>
+                            
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+                
+            </TabItem>
             
             <TabItem Header="OxyPlot">
                 <oxy:Plot>
