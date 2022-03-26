@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Windows.Input;
 
 using CommonLibrary.ViewModels.Base;
 using CommonLibrary.Infrastructure.Commands;
-using System.Windows.Input;
+
+using CV19.Models;
 
 namespace CV19.ViewModels
 {
@@ -18,7 +19,10 @@ namespace CV19.ViewModels
         public string WndTitle { get => _WndTitle; set => SetProperty(ref _WndTitle, value); }
         #endregion WndTitle
 
-
+        #region DataPoints - Test Data for OxyPlot 
+        private IEnumerable<DataPoint> _DataPoints;
+        public IEnumerable<DataPoint> DataPoints { get => _DataPoints; set => SetProperty(ref _DataPoints, value); }
+        #endregion DataPoints
 
         #endregion Properties
 
@@ -46,7 +50,6 @@ namespace CV19.ViewModels
 
 
         #region Constructors
-
         public MainViewModel()
         {
 
@@ -54,20 +57,24 @@ namespace CV19.ViewModels
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
             #endregion CommandsInit
 
+            var data_points = new List<DataPoint>((int)(360/0.1));
+            for (var x = 0d; x < 360; x += 0.1)
+            {
+                const double to_rad = Math.PI / 180;
+                var y = Math.Sin(x * to_rad);
+
+                data_points.Add(new DataPoint { XValue = x, YValue = y });
+            }
+
+            DataPoints = data_points;
         }
-
-
-
         #endregion Constructors
 
 
 
         #region Methods
 
-
-
-
-        #endregion Methods
+        #endregion Methods 
 
     }
 }
