@@ -6,4 +6,16 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\Commands\" />
+    <Folder Include="Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CommonLibrary">
+      <HintPath>..\CommonLibrary\bin\Debug\netcoreapp3.1\CommonLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
