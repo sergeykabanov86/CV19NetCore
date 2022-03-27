@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Linq;
-
+using System.Security.Cryptography.X509Certificates;
 using CommonLibrary.ViewModels.Base;
 using CommonLibrary.Infrastructure.Commands;
 
@@ -110,8 +110,10 @@ namespace CV19.ViewModels
             Groups = new ObservableCollection<Group>(groups);
 
 
+
             #endregion Students
         }
+
         #endregion Constructors
 
 
