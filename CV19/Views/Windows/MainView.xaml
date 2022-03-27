@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CV19.Views.Windows"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:vm="clr-namespace:CV19.ViewModels"
         xmlns:models="clr-namespace:CV19.Models"
         xmlns:decanat="clr-namespace:CV19.Models.Decanat"
         xmlns:cmd="clr-namespace:CV19.Infrastructure.Commands"
-        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:oxy="http://oxyplot.org/wpf" 
+        
         Title="{Binding WndTitle}" Height="450" Width="800">
     <Window.DataContext>
         <vm:MainViewModel />
@@ -75,7 +77,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>-->
                                     <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="decanat:Student">
+                                        <DataTemplate DataType="{x:Type decanat:Student}">
                                             <TextBlock Text="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -104,6 +106,43 @@
                                     Color="Red"/>
                 </oxy:Plot>
             </TabItem>
+
+            <TabItem Header="CompositeCollection">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <GroupBox Header="Элементы:">
+                        <GroupBox.Resources>
+                            <DataTemplate DataType="{x:Type decanat:Group}">
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type sys:DateTime}">
+                                <TextBlock Text="{Binding StringFormat=dd.MM.yyyy}"/>
+                            </DataTemplate>
+                        </GroupBox.Resources>
+                        <ListBox Grid.Column="0" ItemsSource="{Binding CompositeCollection}" SelectedItem="{Binding CompositeCollectionSelected}" SelectedIndex="2"/>
+                    </GroupBox>
+
+                    <GroupBox Grid.Column="1">
+                        <GroupBox.Resources>
+                            <DataTemplate DataType="{x:Type decanat:Group}">
+                                <TextBlock Text="{Binding Name}"></TextBlock>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type sys:DateTime}">
+                                <TextBlock Text="{Binding StringFormat=dd/MMMM/yyyy}" Background ="Aqua"/>
+                            </DataTemplate>
+                        </GroupBox.Resources>
+                        <ContentControl Content="{Binding CompositeCollectionSelected}"/>
+                    </GroupBox>
+
+
+                </Grid>
+            </TabItem>
+
         </TabControl>
 
 

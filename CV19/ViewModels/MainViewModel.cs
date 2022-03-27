@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
 using CommonLibrary.ViewModels.Base;
 using CommonLibrary.Infrastructure.Commands;
@@ -44,6 +45,20 @@ namespace CV19.ViewModels
 
         #endregion Students
 
+        public ObservableCollection<object> CompositeCollection { get;}
+
+        #region object CompositeCollectionSelected - Selected Item
+
+        private object _CompositeCollectionSelected;
+
+        public object CompositeCollectionSelected
+        {
+            get => _CompositeCollectionSelected;
+            set => SetProperty(ref _CompositeCollectionSelected, value);
+        }
+
+        #endregion object _CompositeCollectionSelected - Selected Item      
+      
         #endregion Properties
 
 
@@ -108,10 +123,18 @@ namespace CV19.ViewModels
                                    });
 
             Groups = new ObservableCollection<Group>(groups);
-
-
-
             #endregion Students
+
+            #region CompositeCollection
+
+            var compositesList = new List<object>();
+            compositesList.Add(3216);
+            compositesList.Add("This a string");
+            compositesList.Add(Groups[0]);
+            compositesList.Add(Groups[3].Students.ElementAt(3).Birthday);
+            CompositeCollection = new ObservableCollection<object>(compositesList);
+
+            #endregion CompositeCollection
         }
 
         #endregion Constructors
