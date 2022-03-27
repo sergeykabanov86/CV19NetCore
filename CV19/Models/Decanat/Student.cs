@@ -8,7 +8,7 @@ namespace CV19.Models.Decanat
     {
         public string Name { get; set; }
 
-        public string SurName { get; set; }
+        public string Surname { get; set; }
 
         public string Patronomic { get; set; }
 

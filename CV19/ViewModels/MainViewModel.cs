@@ -15,11 +15,7 @@ namespace CV19.ViewModels
     internal class MainViewModel : ViewModel
     {
 
-        #region Students
 
-        public ObservableCollection<Group> Groups { get; }
-
-        #endregion
 
         #region Properties
 
@@ -32,6 +28,21 @@ namespace CV19.ViewModels
         private IEnumerable<DataPoint> _DataPoints;
         public IEnumerable<DataPoint> DataPoints { get => _DataPoints; set => SetProperty(ref _DataPoints, value); }
         #endregion DataPoints
+
+
+
+        #region Students
+
+        public ObservableCollection<Group> Groups { get; }
+
+        #region GroupSelected - Выбранная группа
+        private Group _GroupSelected;
+        public Group GroupSelected { get => _GroupSelected; set => SetProperty(ref _GroupSelected, value); }
+        #endregion GroupSelected
+
+
+
+        #endregion Students
 
         #endregion Properties
 
@@ -81,21 +92,19 @@ namespace CV19.ViewModels
             #region Students
 
             var student_idx = 0;
-            var students = Enumerable.Range(1, 10)
-                                     .Select(i => new Student
-                                     {
-                                          Name = $"Name: {student_idx}",
-                                           SurName = $"Surname: {student_idx}",
-                                            Patronomic = $"Patronomic: {student_idx++}",
-                                             Birthday = DateTime.Now.AddDays(i*(-1) + 1),
-                                              Rating = 0
-                                     }).ToArray();
-
             var groups = Enumerable.Range(1, 20)
                                    .Select(i => new Group
                                    {
                                        Name = $"Группа {i}",
-                                       Students = students
+                                       Students = Enumerable.Range(1, 10)
+                                     .Select(i => new Student
+                                     {
+                                         Name = $"Name: {student_idx}",
+                                         Surname = $"Surname: {student_idx}",
+                                         Patronomic = $"Patronomic: {student_idx++}",
+                                         Birthday = DateTime.Now.AddDays(i * (-1) + 1),
+                                         Rating = 0
+                                     }).ToArray()
                                    });
 
             Groups = new ObservableCollection<Group>(groups);

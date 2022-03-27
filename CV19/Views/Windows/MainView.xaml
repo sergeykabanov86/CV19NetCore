@@ -49,17 +49,27 @@
                         <ColumnDefinition Width="7*"/>
                     </Grid.ColumnDefinitions>
                     <GroupBox Grid.Column="0" Header="Группы">
-                        <ListBox ItemsSource="{Binding Groups}" DisplayMemberPath="Name"/>
+                        <ListBox ItemsSource="{Binding Groups}" DisplayMemberPath="Name" SelectedItem="{Binding GroupSelected}" SelectedIndex="0"/>
                     </GroupBox>
-                    <GroupBox Grid.Column="1" Header="Студенты">
-                        <DataGrid>
-                            
+                    <GroupBox Grid.Column="1" Header="{Binding GroupSelected.Name, FallbackValue='Студенты', TargetNullValue='Группа не выбрана'}">
+                        <DataGrid ItemsSource="{Binding GroupSelected.Students}" 
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}"/>
+                                <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                                <DataGridTextColumn Header="Отчество" Binding="{Binding Patronomic}"/>
+                                <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}"/>
+                                <DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday, StringFormat=dd.MM.yyyy, TargetNullValue='', FallbackValue=''}"/>
+
+                                <DataGridTextColumn Header="Группа" Binding="{Binding DataContext.GroupSelected.Name, RelativeSource={RelativeSource AncestorType=DataGrid}}" />
+                            </DataGrid.Columns>
                         </DataGrid>
                     </GroupBox>
                 </Grid>
-                
+
             </TabItem>
-            
+
             <TabItem Header="OxyPlot">
                 <oxy:Plot>
                     <oxy:Plot.Axes>
@@ -68,7 +78,7 @@
                     </oxy:Plot.Axes>
                     <oxy:LineSeries ItemsSource="{Binding DataPoints}" DataFieldX="XValue" DataFieldY="YValue" 
                                     Color="Red"/>
-                </oxy:Plot>    
+                </oxy:Plot>
             </TabItem>
         </TabControl>
 
