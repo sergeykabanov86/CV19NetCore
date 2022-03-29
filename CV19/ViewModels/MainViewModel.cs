@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Cryptography.X509Certificates;
+using System.Windows.Media.Converters;
 using CommonLibrary.ViewModels.Base;
 using CommonLibrary.Infrastructure.Commands;
 
@@ -45,7 +46,7 @@ namespace CV19.ViewModels
 
         #endregion Students
 
-        public ObservableCollection<object> CompositeCollection { get;}
+        public ObservableCollection<object> CompositeCollection { get; }
 
         #region object CompositeCollectionSelected - Selected Item
 
@@ -58,7 +59,7 @@ namespace CV19.ViewModels
         }
 
         #endregion object _CompositeCollectionSelected - Selected Item      
-      
+
         #endregion Properties
 
 
@@ -78,7 +79,45 @@ namespace CV19.ViewModels
         #endregion
 
 
+        #region StudentsCommand
 
+        #region CreateNewGroupCommand
+
+        public ICommand CreateNewGroupCommand { get; }
+        private void OnCreateNewGroupCommandExecuted(object p)
+        {
+            var groupMaxIndex = Groups.Count + 1;
+            var newGroup = new Group
+            {
+                Name = $"Группа {groupMaxIndex}",
+                Students = new ObservableCollection<Student>()
+            };
+            Groups.Add(newGroup);
+
+        }
+        private bool CanCreateNewGroupCommandExecute(object p) => true;
+
+        #endregion CreateNewGroupCommand
+
+
+        #region DeleteGroupCommand
+        public ICommand DeleteGroupCommand { get; }
+        private void OnDeleteGroupCommandExecuted(object p)
+        {
+
+            if (!(p is Group group)) return;
+            var idx = Groups.IndexOf(group) - 1;
+            Groups.Remove(group);
+            if (Groups.Count == 0) return;
+            if (idx < 0) idx = 0;
+            GroupSelected = Groups[idx];
+        }
+
+        private bool CanDeleteGroupCommandExecute(object p) => GroupSelected != null && Groups.Contains(GroupSelected) ? true : false;
+
+        #endregion DeleteGroupCommand
+
+        #endregion StudentsCommand
 
         #endregion Commands
 
@@ -123,6 +162,13 @@ namespace CV19.ViewModels
                                    });
 
             Groups = new ObservableCollection<Group>(groups);
+
+            #region StudentCommands
+
+            CreateNewGroupCommand = new LambdaCommand(OnCreateNewGroupCommandExecuted, CanCreateNewGroupCommandExecute);
+            DeleteGroupCommand = new LambdaCommand(OnDeleteGroupCommandExecuted, CanDeleteGroupCommandExecute);
+
+            #endregion StudentCommands
             #endregion Students
 
             #region CompositeCollection

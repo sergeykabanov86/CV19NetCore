@@ -43,7 +43,7 @@
         <ToolBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"></ToolBar>
 
 
-        <TabControl Grid.Row="2" Grid.Column="1">
+        <TabControl Grid.Row="2" Grid.Column="1" SelectedIndex ="1">
             <TabItem Header="Main"></TabItem>
 
             <TabItem Header="Students" Height="20" VerticalAlignment="Bottom">
@@ -53,7 +53,23 @@
                         <ColumnDefinition Width="7*"/>
                     </Grid.ColumnDefinitions>
                     <GroupBox Grid.Column="0" Header="Группы">
-                        <ListBox ItemsSource="{Binding Groups}" DisplayMemberPath="Name" SelectedItem="{Binding GroupSelected}" SelectedIndex="0"/>
+                        <DockPanel>
+                            <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0,3,0,0">
+                                <Button Content="Add" Command="{Binding CreateNewGroupCommand}" Margin="3"/>
+                                <Button Content="Delete" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding GroupSelected}" Margin="3"/>
+                            </UniformGrid>
+                            <ListBox ItemsSource="{Binding Groups}" SelectedItem="{Binding GroupSelected}" >
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="decanat:Group">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}"  VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Students.Count, StringFormat='Студентов: {0}'}" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+
                     </GroupBox>
                     <GroupBox Grid.Column="1" Header="{Binding GroupSelected.Name, FallbackValue='Студенты', TargetNullValue='Группа не выбрана'}">
                         <DataGrid ItemsSource="{Binding GroupSelected.Students}" 
@@ -93,9 +109,7 @@
                         </DataGrid>
                     </GroupBox>
                 </Grid>
-
             </TabItem>
-
             <TabItem Header="OxyPlot">
                 <oxy:Plot>
                     <oxy:Plot.Axes>
@@ -106,15 +120,13 @@
                                     Color="Red"/>
                 </oxy:Plot>
             </TabItem>
-
+            <!--Разнородные данные-->
             <TabItem Header="CompositeCollection">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="250"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
-
                     <GroupBox Header="Элементы:">
                         <GroupBox.Resources>
                             <DataTemplate DataType="{x:Type decanat:Group}">
@@ -126,7 +138,6 @@
                         </GroupBox.Resources>
                         <ListBox Grid.Column="0" ItemsSource="{Binding CompositeCollection}" SelectedItem="{Binding CompositeCollectionSelected}" SelectedIndex="2"/>
                     </GroupBox>
-
                     <GroupBox Grid.Column="1">
                         <GroupBox.Resources>
                             <DataTemplate DataType="{x:Type decanat:Group}">
@@ -138,8 +149,6 @@
                         </GroupBox.Resources>
                         <ContentControl Content="{Binding CompositeCollectionSelected}"/>
                     </GroupBox>
-
-
                 </Grid>
             </TabItem>
 
