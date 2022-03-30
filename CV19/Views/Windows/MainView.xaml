@@ -143,23 +143,21 @@
                     </Grid.ColumnDefinitions>
                     <GroupBox Header="Элементы:">
                         <GroupBox.Resources>
-                            <DataTemplate DataType="{x:Type decanat:Group}">
-                                <TextBlock Text="{Binding Name}"/>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type sys:DateTime}">
-                                <TextBlock Text="{Binding StringFormat=dd.MM.yyyy}"/>
-                            </DataTemplate>
+                           <ResourceDictionary>
+                               <ResourceDictionary.MergedDictionaries>
+                                   <ResourceDictionary Source="../../Resources/DataTemplates/CompositeCollectionDataTemplates.xaml" />
+                               </ResourceDictionary.MergedDictionaries>
+                           </ResourceDictionary>
                         </GroupBox.Resources>
                         <ListBox Grid.Column="0" ItemsSource="{Binding CompositeCollection}" SelectedItem="{Binding CompositeCollectionSelected}" SelectedIndex="2"/>
                     </GroupBox>
                     <GroupBox Grid.Column="1">
                         <GroupBox.Resources>
-                            <DataTemplate DataType="{x:Type decanat:Group}">
-                                <TextBlock Text="{Binding Name}"></TextBlock>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type sys:DateTime}">
-                                <TextBlock Text="{Binding StringFormat=dd/MMMM/yyyy}" Background ="Aqua"/>
-                            </DataTemplate>
+                           <ResourceDictionary>
+                               <ResourceDictionary.MergedDictionaries>
+                                   <ResourceDictionary Source="../../Resources/DataTemplates/CompositeCollectionContentControlDataTemplates.xaml"></ResourceDictionary>
+                               </ResourceDictionary.MergedDictionaries>
+                           </ResourceDictionary>
                         </GroupBox.Resources>
                         <ContentControl Content="{Binding CompositeCollectionSelected}"/>
                     </GroupBox>
