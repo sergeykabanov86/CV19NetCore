@@ -10,7 +10,7 @@
         xmlns:decanat="clr-namespace:CV19.Models.Decanat"
         xmlns:cmd="clr-namespace:CV19.Infrastructure.Commands"
         xmlns:oxy="http://oxyplot.org/wpf" 
-        
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
         Title="{Binding WndTitle}" Height="450" Width="800">
     <Window.DataContext>
         <vm:MainViewModel />
@@ -58,7 +58,7 @@
                     </Grid.ColumnDefinitions>
                     <GroupBox Grid.Column="0" Header="Группы">
                         <DockPanel>
-                            <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0,3,0,0">
+                            <UniformGrid DockPanel.Dock="Bottom" Rows="3" Margin="0,3,0,0">
                                 <UniformGrid.Resources>
                                     <Style x:Key="ButtonsStyle" TargetType="Button">
                                         <Setter Property="Margin" Value="2"/>
@@ -69,16 +69,79 @@
                                         <Setter Property="Background" Value="White"/>
                                     </Style>
                                 </UniformGrid.Resources>
-                                <Button Content="Add" Command="{Binding CreateNewGroupCommand}" CommandParameter="{x:Null}" Style="{StaticResource  PrimaryBtnStyle}"/>
+                                <Button  Command="{Binding CreateNewGroupCommand}" CommandParameter="{x:Null}" Style="{StaticResource  PrimaryBtnStyle}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:SvgAwesome Icon="Solid_Check" Foreground="GreenYellow" MaxHeight="15" MaxWidth="15">
+                                                <fa:SvgAwesome.Effect>
+                                                    <DropShadowEffect ShadowDepth="1" />
+                                                </fa:SvgAwesome.Effect>
+                                            </fa:SvgAwesome>
+                                            <TextBlock Text="Add" Margin="3,0,0,0"></TextBlock>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
                                 <Button Content="Delete" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding GroupSelected}" Style="{StaticResource DangerBtnStyle}" />
+                                <Button Content="MyStyle" Style="{StaticResource MyButtonStyle}" />
+                                <Button Content="MyStyleDict" Style="{StaticResource MyCheckButtonStyle}" />
+                                <Button Content="Animation" Style="{StaticResource MyCheckButtonStyle}"
+                                        RenderTransformOrigin="0.0,0.5">
+                                    <Button.Background>
+                                        <SolidColorBrush Color="WhiteSmoke" x:Name="ButtonBrush"/>
+                                    </Button.Background>
+                                    <Button.RenderTransform>
+                                        <RotateTransform x:Name="BtnTransformRotate" />
+                                    </Button.RenderTransform>
+                                    <Button.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="BtnTransformRotate" 
+                                                                         Storyboard.TargetProperty="Angle"
+                                                                         From="0" To="360" By="0.1"
+                                                                         Duration="0:0:1"
+                                                                         AutoReverse="True"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="ButtonBrush"
+                                                                    Storyboard.TargetProperty="Color"
+                                                                    To="Red"
+                                                                    Duration="0:0:0.1"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="ButtonBrush"
+                                                                    Storyboard.TargetProperty="Color"
+                                                                    Duration="0:0:3"
+                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Button.Triggers>
+                                </Button>
                             </UniformGrid>
                             <ListBox ItemsSource="{Binding Groups}" SelectedItem="{Binding GroupSelected}" SelectedIndex="0">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="decanat:Group">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Name}"  VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding Students.Count, StringFormat='Студентов: {0}'}" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
+                                            <TextBlock x:Name="StudentsCountView" Text="{Binding Students.Count, StringFormat='Студентов: {0}'}" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
                                         </StackPanel>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Students.Count}" Value="0">
+                                                <Setter TargetName="StudentsCountView" Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
@@ -138,31 +201,33 @@
             <TabItem Header="CompositeCollection">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="60.502"/>
+                        <ColumnDefinition Width="189.498"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Элементы:">
+                    <GroupBox Header="Элементы:" Grid.ColumnSpan="2">
                         <GroupBox.Resources>
-                           <ResourceDictionary>
-                               <ResourceDictionary.MergedDictionaries>
-                                   <ResourceDictionary Source="../../Resources/DataTemplates/CompositeCollectionDataTemplates.xaml" />
-                               </ResourceDictionary.MergedDictionaries>
-                           </ResourceDictionary>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="../../Resources/DataTemplates/CompositeCollectionDataTemplates.xaml" />
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
                         </GroupBox.Resources>
                         <ListBox Grid.Column="0" ItemsSource="{Binding CompositeCollection}" SelectedItem="{Binding CompositeCollectionSelected}" SelectedIndex="2"/>
                     </GroupBox>
-                    <GroupBox Grid.Column="1">
+                    <GroupBox Grid.Column="2">
                         <GroupBox.Resources>
-                           <ResourceDictionary>
-                               <ResourceDictionary.MergedDictionaries>
-                                   <ResourceDictionary Source="../../Resources/DataTemplates/CompositeCollectionContentControlDataTemplates.xaml"></ResourceDictionary>
-                               </ResourceDictionary.MergedDictionaries>
-                           </ResourceDictionary>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="../../Resources/DataTemplates/CompositeCollectionContentControlDataTemplates.xaml"></ResourceDictionary>
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
                         </GroupBox.Resources>
                         <ContentControl Content="{Binding CompositeCollectionSelected}"/>
                     </GroupBox>
                 </Grid>
             </TabItem>
+
 
         </TabControl>
 
