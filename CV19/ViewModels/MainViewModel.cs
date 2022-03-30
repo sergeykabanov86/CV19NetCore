@@ -145,7 +145,7 @@ namespace CV19.ViewModels
 
             #region Students
 
-            var student_idx = 0;
+            var studentIdx = 0;
             var groups = Enumerable.Range(1, 20)
                                    .Select(i => new Group
                                    {
@@ -153,9 +153,9 @@ namespace CV19.ViewModels
                                        Students = Enumerable.Range(1, 10)
                                      .Select(i => new Student
                                      {
-                                         Name = $"Name: {student_idx}",
-                                         Surname = $"Surname: {student_idx}",
-                                         Patronomic = $"Patronomic: {student_idx++}",
+                                         Name = $"Name: {studentIdx}",
+                                         Surname = $"Surname: {studentIdx}",
+                                         Patronomic = $"Patronomic: {studentIdx++}",
                                          Birthday = DateTime.Now.AddDays(i * (-1) + 1),
                                          Rating = 0
                                      }).ToArray()
