@@ -59,12 +59,13 @@
                     <GroupBox Grid.Column="0" Header="Группы">
                         <DockPanel>
                             <DockPanel.Resources>
-                                <CollectionViewSource x:Key="GroupsCollection" Source="{Binding Groups}"/>
+                                <CollectionViewSource x:Key="GroupsCollection" x:Name="GroupsCollection" 
+                                                      Source="{Binding Groups}" Filter="GroupsCollection_OnFilter"/>
                             </DockPanel.Resources>
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <!--Для фильтра групп-->
                                 <fa:SvgAwesome Icon="Solid_Search" Height="12" Margin="3,0" />
-                                <TextBox />
+                                <TextBox Name="tbGroupFIlter" TextChanged="TbGroupFIlter_OnTextChanged"/>
                             </DockPanel>
                             <UniformGrid DockPanel.Dock="Bottom" Rows="3" Margin="0,3,0,0">
                                 <UniformGrid.Resources>
