@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Linq;
 using CV19.ViewModels.Base;
 using CV19.Infrastructure.Commands;
-
 using CV19.Models;
 using CV19.Models.Decanat;
 
