@@ -55,14 +55,45 @@ namespace CV19.ViewModels
 
         #region CollectionViewSource GroupSelectedView - Description
 
+        #region string StudentFilterText - Description
+
+        private string _StudentFilterText;
+        public string StudentFilterText
+        {
+            get => _StudentFilterText;
+            set
+            {
+                if (!SetProperty(ref _StudentFilterText, value)) return;
+                GroupSelectedView.Refresh();
+            }
+        }
+
+        #endregion string _StudentFilterText - Description
+
         private readonly System.Windows.Data.CollectionViewSource _GroupSelectedView = new CollectionViewSource();
         public ICollectionView GroupSelectedView
         {
             get => _GroupSelectedView.View;
         }
 
-        #endregion CollectionViewSource _GroupSelectedView - Description
+        //Реализация фильтра
+        private void OnGroupSelectedView_Filter(object sender, FilterEventArgs e)
+        {
+            var txt = StudentFilterText;
+            if (!(e.Item is Student student)) return;
+            if (string.IsNullOrEmpty(txt)) return;
+            if (student.Name is null || student.Surname is null || student.Patronomic is null) return;
+            txt = txt.Trim();
 
+            if (student.Name.Contains(txt, StringComparison.OrdinalIgnoreCase) || student.Surname.Contains(txt, StringComparison.OrdinalIgnoreCase) ||
+                student.Patronomic.Contains(txt, StringComparison.OrdinalIgnoreCase) ||
+                (student.Description != null && student.Description.Contains(txt, StringComparison.OrdinalIgnoreCase)))
+                return;
+
+            e.Accepted = false;
+        }
+
+        #endregion CollectionViewSource _GroupSelectedView - Description
         #endregion Students
 
         public ObservableCollection<object> CompositeCollection { get; }
@@ -165,8 +196,8 @@ namespace CV19.ViewModels
             #region Students
 
             var studentIdx = 0;
-            var maxGroups = App.IsDesignMode ? 5 : 1000;
-            var maxStudent = App.IsDesignMode ? 5 : 25;
+            var maxGroups = App.IsDesignMode ? 5 : 100;
+            var maxStudent = App.IsDesignMode ? 5 : 15;
 
             var groups = Enumerable.Range(1, maxGroups)
                                    .Select(i => new Group
@@ -175,8 +206,8 @@ namespace CV19.ViewModels
                                        Students = Enumerable.Range(1, maxStudent)
                                      .Select(i => new Student
                                      {
-                                         Name = $"Name: {studentIdx}",
-                                         Surname = $"Surname: {studentIdx}",
+                                         Name = $"Name_{studentIdx}",
+                                         Surname = $"Surname_{studentIdx}",
                                          Patronomic = $"Patronomic: {studentIdx++}",
                                          Birthday = DateTime.Now.AddDays(i * (-1) + 1),
                                          Rating = 0
@@ -184,6 +215,10 @@ namespace CV19.ViewModels
                                    });
 
             Groups = new ObservableCollection<Group>(groups);
+
+            _GroupSelectedView.Filter += OnGroupSelectedView_Filter;
+            _GroupSelectedView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Descending));
+            _GroupSelectedView.GroupDescriptions.Add(new PropertyGroupDescription("Name"));
 
             #region StudentCommands
 
@@ -204,6 +239,8 @@ namespace CV19.ViewModels
 
             #endregion CompositeCollection
         }
+
+
 
         #endregion Constructors
 

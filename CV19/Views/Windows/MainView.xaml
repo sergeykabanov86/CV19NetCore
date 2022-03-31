@@ -68,7 +68,7 @@
                                 <fa:SvgAwesome Icon="Solid_Search" Height="12" Margin="3,0" />
                                 <TextBox Name="tbGroupFilter" TextChanged="tbGroupFilter_OnTextChanged"/>
                             </DockPanel>
-                            <UniformGrid DockPanel.Dock="Bottom" Rows="3" Margin="0,3,0,0">
+                            <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0,3,0,0">
                                 <UniformGrid.Resources>
                                     <Style x:Key="ButtonsStyle" TargetType="Button">
                                         <Setter Property="Margin" Value="2"/>
@@ -92,53 +92,6 @@
                                     </Button.Content>
                                 </Button>
                                 <Button Content="Delete" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding GroupSelected}" Style="{StaticResource DangerBtnStyle}" />
-                                <Button Content="MyStyle" Style="{StaticResource MyButtonStyle}" />
-                                <Button Content="MyStyleDict" Style="{StaticResource MyCheckButtonStyle}" />
-                                <Button Content="Animation" Style="{StaticResource MyCheckButtonStyle}"
-                                        RenderTransformOrigin="0.0,0.5">
-                                    <Button.Background>
-                                        <SolidColorBrush Color="WhiteSmoke" x:Name="ButtonBrush"/>
-                                    </Button.Background>
-                                    <Button.RenderTransform>
-                                        <RotateTransform x:Name="BtnTransformRotate" />
-                                    </Button.RenderTransform>
-                                    <Button.Triggers>
-                                        <EventTrigger RoutedEvent="Button.Click">
-                                            <EventTrigger.Actions>
-                                                <BeginStoryboard>
-                                                    <Storyboard>
-                                                        <DoubleAnimation Storyboard.TargetName="BtnTransformRotate" 
-                                                                         Storyboard.TargetProperty="Angle"
-                                                                         From="0" To="360" By="0.1"
-                                                                         Duration="0:0:1"
-                                                                         AutoReverse="True"/>
-                                                    </Storyboard>
-                                                </BeginStoryboard>
-                                            </EventTrigger.Actions>
-                                        </EventTrigger>
-                                        <EventTrigger RoutedEvent="MouseEnter">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <ColorAnimation Storyboard.TargetName="ButtonBrush"
-                                                                    Storyboard.TargetProperty="Color"
-                                                                    To="Red"
-                                                                    Duration="0:0:0.1"
-                                                                    />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                        <EventTrigger RoutedEvent="MouseLeave">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <ColorAnimation Storyboard.TargetName="ButtonBrush"
-                                                                    Storyboard.TargetProperty="Color"
-                                                                    Duration="0:0:3"
-                                                    />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </Button.Triggers>
-                                </Button>
                             </UniformGrid>
                             <ListBox ItemsSource="{Binding Source={StaticResource GroupsCollection}}" SelectedItem="{Binding GroupSelected}" SelectedIndex="0"
                                      VirtualizingPanel.CacheLength="10"
@@ -173,7 +126,7 @@
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <!--Для фильтра групп-->
                                 <fa:SvgAwesome Icon="Solid_Search" Height="12" Margin="3,0" />
-                                <TextBox />
+                                <TextBox Text="{Binding StudentFilterText, UpdateSourceTrigger=PropertyChanged}" />
                             </DockPanel>
                             <DataGrid ItemsSource="{Binding GroupSelectedView}" 
                                   AutoGenerateColumns="False"
@@ -184,9 +137,11 @@
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Auto"
                                   EnableRowVirtualization="True"
-                                  EnableColumnVirtualization="True"
-                        >
+                                  EnableColumnVirtualization="True">
                                 <!--HorizontalGridLinesBrush="{x:Null}"-->
+                                <!--<DataGrid.GroupStyle>
+                                    <GroupStyle/>
+                                </DataGrid.GroupStyle>-->
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" Width="auto" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
@@ -259,6 +214,60 @@
                 </Grid>
             </TabItem>
 
+            <TabItem Header="Buttons" Visibility="Collapsed">
+                <WrapPanel>
+                    <WrapPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Margin" Value="10,10"/>
+                        </Style>
+                    </WrapPanel.Resources>
+                    <Button Content="Simple" />
+                    <Button Content="St stat res" Style="{StaticResource MyCheckButtonStyle}" />
+                    <Button Content="MyStyle" Style="{StaticResource MyButtonStyle}" />
+                    <Button Content="MyStyleDict" Style="{StaticResource MyCheckButtonStyle}" />
+
+                    <Button x:Name="BtnRotate" Content="Rotate" RenderTransformOrigin="0.5,0.5">
+                        <Button.RenderTransform>
+                            <RotateTransform x:Name="btnRotate_RotateTransform" />
+                        </Button.RenderTransform>
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="btnRotate_RotateTransform" Storyboard.TargetProperty="Angle" 
+                                                         From="0.0" To="360" By="0.1" 
+                                                         Duration="0:0:1.5"
+                                                         AutoReverse="True"
+                                                         />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Button.Triggers>
+                        
+                    </Button>
+
+                    <Button x:Name="btnColorAnimation" Content="Color Background">
+                        <Button.Background >
+                            <SolidColorBrush x:Name="btnColorAnimation_SolidCB" Color="Aqua"/>
+                        </Button.Background>
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Button.Click">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="btnColorAnimation_SolidCB" Storyboard.TargetProperty="Color" 
+                                                            From="Aqua" To="OrangeRed" By="Bisque"
+                                                            Duration="0:0:2"
+                                                            AutoReverse="True"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                </WrapPanel>
+            </TabItem>
 
         </TabControl>
 
