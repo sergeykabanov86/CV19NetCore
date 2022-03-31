@@ -4,13 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CV19.Views.Windows"
-        xmlns:VM="clr-namespace:CV19.ViewModels"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+        xmlns:vm="clr-namespace:CV19.ViewModels"
+        xmlns:models="clr-namespace:CV19.Models"
+        xmlns:decanat="clr-namespace:CV19.Models.Decanat"
         xmlns:cmd="clr-namespace:CV19.Infrastructure.Commands"
-        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:oxy="http://oxyplot.org/wpf" 
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
         Title="{Binding WndTitle}" Height="450" Width="800">
     <Window.DataContext>
-        <VM:MainViewModel />
+        <vm:MainViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <cmd:CloseApplicationCommand x:Key="WndCloseApplicationCommand"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
@@ -33,15 +40,153 @@
                         <cmd:CloseApplicationCommand />
                     </MenuItem.Command>
                 </MenuItem>
+                <MenuItem Header="Exit stat res Wnd" Command="{StaticResource WndCloseApplicationCommand}" />
             </MenuItem>
         </Menu>
 
         <ToolBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"></ToolBar>
 
 
-        <TabControl Grid.Row="2" Grid.Column="1">
+        <TabControl Grid.Row="2" Grid.Column="1" SelectedIndex ="1">
             <TabItem Header="Main"></TabItem>
-            
+
+            <TabItem Header="Students" Height="20" VerticalAlignment="Bottom">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="7*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Column="0" Header="Группы">
+                        <DockPanel>
+                            <UniformGrid DockPanel.Dock="Bottom" Rows="3" Margin="0,3,0,0">
+                                <UniformGrid.Resources>
+                                    <Style x:Key="ButtonsStyle" TargetType="Button">
+                                        <Setter Property="Margin" Value="2"/>
+                                        <Setter Property="Background" Value="White"/>
+                                    </Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Margin" Value="2"/>
+                                        <Setter Property="Background" Value="White"/>
+                                    </Style>
+                                </UniformGrid.Resources>
+                                <Button  Command="{Binding CreateNewGroupCommand}" CommandParameter="{x:Null}" Style="{StaticResource  PrimaryBtnStyle}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:SvgAwesome Icon="Solid_Check" Foreground="GreenYellow" MaxHeight="15" MaxWidth="15">
+                                                <fa:SvgAwesome.Effect>
+                                                    <DropShadowEffect ShadowDepth="1" />
+                                                </fa:SvgAwesome.Effect>
+                                            </fa:SvgAwesome>
+                                            <TextBlock Text="Add" Margin="3,0,0,0"></TextBlock>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+                                <Button Content="Delete" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding GroupSelected}" Style="{StaticResource DangerBtnStyle}" />
+                                <Button Content="MyStyle" Style="{StaticResource MyButtonStyle}" />
+                                <Button Content="MyStyleDict" Style="{StaticResource MyCheckButtonStyle}" />
+                                <Button Content="Animation" Style="{StaticResource MyCheckButtonStyle}"
+                                        RenderTransformOrigin="0.0,0.5">
+                                    <Button.Background>
+                                        <SolidColorBrush Color="WhiteSmoke" x:Name="ButtonBrush"/>
+                                    </Button.Background>
+                                    <Button.RenderTransform>
+                                        <RotateTransform x:Name="BtnTransformRotate" />
+                                    </Button.RenderTransform>
+                                    <Button.Triggers>
+                                        <EventTrigger RoutedEvent="Button.Click">
+                                            <EventTrigger.Actions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="BtnTransformRotate" 
+                                                                         Storyboard.TargetProperty="Angle"
+                                                                         From="0" To="360" By="0.1"
+                                                                         Duration="0:0:1"
+                                                                         AutoReverse="True"/>
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger.Actions>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="ButtonBrush"
+                                                                    Storyboard.TargetProperty="Color"
+                                                                    To="Red"
+                                                                    Duration="0:0:0.1"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="ButtonBrush"
+                                                                    Storyboard.TargetProperty="Color"
+                                                                    Duration="0:0:3"
+                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Button.Triggers>
+                                </Button>
+                            </UniformGrid>
+                            <ListBox ItemsSource="{Binding Groups}" SelectedItem="{Binding GroupSelected}" SelectedIndex="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="decanat:Group">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Name}"  VerticalAlignment="Center"/>
+                                            <TextBlock x:Name="StudentsCountView" Text="{Binding Students.Count, StringFormat='Студентов: {0}'}" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
+                                        </StackPanel>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding Students.Count}" Value="0">
+                                                <Setter TargetName="StudentsCountView" Property="Foreground" Value="Red" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Header="{Binding GroupSelected.Name, FallbackValue='Студенты', TargetNullValue='Группа не выбрана'}">
+                        <DataGrid ItemsSource="{Binding GroupSelected.Students}" 
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  GridLinesVisibility="Vertical"
+                                  VerticalGridLinesBrush="DarkGray"
+                                  AlternatingRowBackground="LightGray" 
+                                  >
+                            <!--HorizontalGridLinesBrush="{x:Null}"-->
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Фамилия" Binding="{Binding Surname}" Width="auto" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Имя" Binding="{Binding Name}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Отчество" Binding="{Binding Patronomic}" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Рейтинг" Binding="{Binding Rating}" IsReadOnly="True"/>
+                                <!--<DataGridTextColumn Header="Дата рождения" Binding="{Binding Birthday, StringFormat=dd.MM.yyyy, TargetNullValue='', FallbackValue=''}"/>-->
+                                <DataGridTemplateColumn Header="Дата рождения" IsReadOnly="False">
+                                    <!--<DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="decanat:Student">
+                                            <DatePicker  SelectedDate="{Binding Birthday}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>-->
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type decanat:Student}">
+                                            <TextBlock Text="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate DataType="decanat:Student">
+                                            <DatePicker SelectedDate="{Binding Birthday, StringFormat=dd.MM.yyyy}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Группа" Binding="{Binding DataContext.GroupSelected.Name, RelativeSource={RelativeSource AncestorType=DataGrid}, TargetNullValue=' ', FallbackValue=' '}"  IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Описание" Binding="{Binding Description}" Width="*"  IsReadOnly="False"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
             <TabItem Header="OxyPlot">
                 <oxy:Plot>
                     <oxy:Plot.Axes>
@@ -50,8 +195,40 @@
                     </oxy:Plot.Axes>
                     <oxy:LineSeries ItemsSource="{Binding DataPoints}" DataFieldX="XValue" DataFieldY="YValue" 
                                     Color="Red"/>
-                </oxy:Plot>    
+                </oxy:Plot>
             </TabItem>
+            <!--Разнородные данные-->
+            <TabItem Header="CompositeCollection">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60.502"/>
+                        <ColumnDefinition Width="189.498"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Элементы:" Grid.ColumnSpan="2">
+                        <GroupBox.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="../../Resources/DataTemplates/CompositeCollectionDataTemplates.xaml" />
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
+                        </GroupBox.Resources>
+                        <ListBox Grid.Column="0" ItemsSource="{Binding CompositeCollection}" SelectedItem="{Binding CompositeCollectionSelected}" SelectedIndex="2"/>
+                    </GroupBox>
+                    <GroupBox Grid.Column="2">
+                        <GroupBox.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="../../Resources/DataTemplates/CompositeCollectionContentControlDataTemplates.xaml"></ResourceDictionary>
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
+                        </GroupBox.Resources>
+                        <ContentControl Content="{Binding CompositeCollectionSelected}"/>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+
         </TabControl>
 
 

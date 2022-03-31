@@ -11,16 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
     <PackageReference Include="FontAwesome5" Version="2.1.6" />
     <PackageReference Include="MaterialDesignThemes" Version="4.4.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="OxyPlot.Wpf" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CommonLibrary">
-      <HintPath>..\CommonLibrary\bin\Debug\netcoreapp3.1\CommonLibrary.dll</HintPath>
-    </Reference>
+   
   </ItemGroup>
 
 </Project>

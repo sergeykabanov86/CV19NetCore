@@ -3,15 +3,15 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 
-namespace CommonLibrary.ViewModels.Base
+namespace CV19.ViewModels.Base
 {
     public class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
         }
 
         protected virtual bool SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
