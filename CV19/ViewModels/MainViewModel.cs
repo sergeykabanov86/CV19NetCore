@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Linq;
-using System.Security.AccessControl;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows.Media.Converters;
-using CommonLibrary.ViewModels.Base;
-using CommonLibrary.Infrastructure.Commands;
+using CV19.ViewModels.Base;
+using CV19.Infrastructure.Commands;
 
 using CV19.Models;
 using CV19.Models.Decanat;
@@ -16,8 +13,6 @@ namespace CV19.ViewModels
 {
     internal class MainViewModel : ViewModel
     {
-
-
 
         #region Properties
 

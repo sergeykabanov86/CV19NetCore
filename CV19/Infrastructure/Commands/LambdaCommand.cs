@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommonLibrary.Infrastructure.Commands
+namespace CV19.Infrastructure.Commands
 {
     public class LambdaCommand : Commands.Base.CommandBase
     {
@@ -17,7 +17,5 @@ namespace CommonLibrary.Infrastructure.Commands
 
 
         public override bool CanExecute(object parameter) => _CanExecute?.Invoke(parameter) ?? true;
-
-       
     }
 }
