@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" mc:Ignorable="d"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="clr-namespace:CV19"
         xmlns:local="clr-namespace:CV19.Views.Windows"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         xmlns:vm="clr-namespace:CV19.ViewModels"
@@ -143,13 +144,13 @@
                                      VirtualizingPanel.CacheLength="10"
                                      VirtualizingPanel.IsVirtualizing="True"
                                      VirtualizingPanel.IsContainerVirtualizable="True"
-                                     VirtualizingPanel.VirtualizationMode="Standard">
+                                     VirtualizingPanel.VirtualizationMode="Recycling">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <VirtualizingStackPanel />
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
-                                
+
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="decanat:Group">
                                         <StackPanel Orientation="Horizontal">
@@ -179,7 +180,9 @@
                                   CanUserAddRows="False"
                                   GridLinesVisibility="Vertical"
                                   VerticalGridLinesBrush="DarkGray"
-                                  AlternatingRowBackground="LightGray" 
+                                  AlternatingRowBackground="LightGray"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Auto"
                         >
                                 <!--HorizontalGridLinesBrush="{x:Null}"-->
                                 <DataGrid.Columns>
@@ -259,9 +262,46 @@
 
 
         <StatusBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
-            <StackPanel Orientation="Horizontal">
-                <ProgressBar MinWidth="100" MinHeight="10" Value="50"/>
-            </StackPanel>
+            <StatusBar.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Left" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="5,0"></Setter>
+                </Style>
+            </StatusBar.Resources>
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="TextBlock" />
+                    <ComboBox />
+                </StackPanel>
+            </StatusBarItem>
+            <Separator Grid.Column="1" />
+
+            <Separator Grid.Column="3" />
+            <StatusBarItem Grid.Column="4">
+                <ProgressBar Value="33" MinWidth="100" MinHeight="12"></ProgressBar>
+            </StatusBarItem>
+            <Separator Grid.Column="5" />
+            <StatusBarItem Grid.Column="6">
+                <TextBlock Text="{Binding Source={x:Static l:App.IsDesignMode}, StringFormat='Is Design mode: {0}'}" FontWeight="Bold" />
+            </StatusBarItem>
+
         </StatusBar>
+
     </Grid>
 </Window>

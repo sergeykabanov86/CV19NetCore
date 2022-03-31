@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Linq;
+using System.Windows;
 using CV19.ViewModels.Base;
 using CV19.Infrastructure.Commands;
 using CV19.Models;
@@ -140,11 +141,14 @@ namespace CV19.ViewModels
             #region Students
 
             var studentIdx = 0;
-            var groups = Enumerable.Range(1, 20)
+            var maxGroups = App.IsDesignMode ? 5 : 100000;
+            var maxStudent = App.IsDesignMode ? 5 : 100;
+
+            var groups = Enumerable.Range(1, maxGroups)
                                    .Select(i => new Group
                                    {
                                        Name = $"Группа {i}",
-                                       Students = Enumerable.Range(1, 10)
+                                       Students = Enumerable.Range(1, maxStudent)
                                      .Select(i => new Student
                                      {
                                          Name = $"Name: {studentIdx}",
