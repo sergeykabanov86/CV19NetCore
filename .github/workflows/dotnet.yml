@@ -1,18 +1,16 @@
 name: .NET
 
-on: [push, pull_request]
-#  push:
-#    branches: [ master ]
-#  pull_request:
-#    branches: [ master ]
+on:
+  push:
+    branches: [ master,dev ]
+  pull_request:
+    branches: [ master,dev ]
 
 jobs:
   build:
-    name: Initialize Build on .Net Core
-    
-#   runs-on: ubuntu-latest
+    name: Install OS
     runs-on: windows-latest
-    
+
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -22,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build -c Release --no-restore
+      run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
