@@ -58,6 +58,9 @@
                     </Grid.ColumnDefinitions>
                     <GroupBox Grid.Column="0" Header="Группы">
                         <DockPanel>
+                            <DockPanel.Resources>
+                                <CollectionViewSource x:Key="GroupsCollection" Source="{Binding Groups}"/>
+                            </DockPanel.Resources>
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <!--Для фильтра групп-->
                                 <fa:SvgAwesome Icon="Solid_Search" Height="12" Margin="3,0" />
@@ -135,7 +138,7 @@
                                     </Button.Triggers>
                                 </Button>
                             </UniformGrid>
-                            <ListBox ItemsSource="{Binding Groups}" SelectedItem="{Binding GroupSelected}" SelectedIndex="0">
+                            <ListBox ItemsSource="{Binding Source={StaticResource GroupsCollection}}" SelectedItem="{Binding GroupSelected}" SelectedIndex="0">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="decanat:Group">
                                         <StackPanel Orientation="Horizontal">
