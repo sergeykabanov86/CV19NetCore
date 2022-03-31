@@ -175,7 +175,7 @@
                                 <fa:SvgAwesome Icon="Solid_Search" Height="12" Margin="3,0" />
                                 <TextBox />
                             </DockPanel>
-                            <DataGrid ItemsSource="{Binding GroupSelected.Students}" 
+                            <DataGrid ItemsSource="{Binding GroupSelectedView}" 
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False"
                                   GridLinesVisibility="Vertical"
@@ -183,6 +183,8 @@
                                   AlternatingRowBackground="LightGray"
                                   HorizontalScrollBarVisibility="Auto"
                                   VerticalScrollBarVisibility="Auto"
+                                  EnableRowVirtualization="True"
+                                  EnableColumnVirtualization="True"
                         >
                                 <!--HorizontalGridLinesBrush="{x:Null}"-->
                                 <DataGrid.Columns>
@@ -286,7 +288,7 @@
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="TextBlock" />
+                    <TextBlock Text="{Binding Groups.Count, StringFormat='Кол-во групп: {0}'}" />
                     <ComboBox />
                 </StackPanel>
             </StatusBarItem>

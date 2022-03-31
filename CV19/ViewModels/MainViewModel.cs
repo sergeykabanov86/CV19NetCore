@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using CV19.ViewModels.Base;
 using CV19.Infrastructure.Commands;
-using CV19.Models;
 using CV19.Models.Decanat;
+using OxyPlot;
+using DataPoint = CV19.Models.DataPoint;
 
 namespace CV19.ViewModels
 {
@@ -34,10 +37,31 @@ namespace CV19.ViewModels
 
         #region GroupSelected - Выбранная группа
         private Group _GroupSelected;
-        public Group GroupSelected { get => _GroupSelected; set => SetProperty(ref _GroupSelected, value); }
+        public Group GroupSelected
+        {
+            get => _GroupSelected;
+            set
+            {
+                if (SetProperty(ref _GroupSelected, value))
+                {
+                    _GroupSelectedView.Source = value?.Students;
+                    OnPropertyChanged(nameof(GroupSelectedView));
+                }
+            }
+        }
+
         #endregion GroupSelected
 
 
+        #region CollectionViewSource GroupSelectedView - Description
+
+        private readonly System.Windows.Data.CollectionViewSource _GroupSelectedView = new CollectionViewSource();
+        public ICollectionView GroupSelectedView
+        {
+            get => _GroupSelectedView.View;
+        }
+
+        #endregion CollectionViewSource _GroupSelectedView - Description
 
         #endregion Students
 
@@ -141,8 +165,8 @@ namespace CV19.ViewModels
             #region Students
 
             var studentIdx = 0;
-            var maxGroups = App.IsDesignMode ? 5 : 100000;
-            var maxStudent = App.IsDesignMode ? 5 : 100;
+            var maxGroups = App.IsDesignMode ? 5 : 1000;
+            var maxStudent = App.IsDesignMode ? 5 : 25;
 
             var groups = Enumerable.Range(1, maxGroups)
                                    .Select(i => new Group

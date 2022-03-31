@@ -20,7 +20,7 @@ namespace CV19.ViewModels.Base
 
             field = value;
             OnPropertyChanged(propertyName);
-            return false;
+            return true;
         }
     }
 }
