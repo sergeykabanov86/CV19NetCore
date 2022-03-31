@@ -65,7 +65,7 @@
                             <DockPanel DockPanel.Dock="Top" Margin="0,3">
                                 <!--Для фильтра групп-->
                                 <fa:SvgAwesome Icon="Solid_Search" Height="12" Margin="3,0" />
-                                <TextBox Name="tbGroupFIlter" TextChanged="TbGroupFIlter_OnTextChanged"/>
+                                <TextBox Name="tbGroupFilter" TextChanged="tbGroupFilter_OnTextChanged"/>
                             </DockPanel>
                             <UniformGrid DockPanel.Dock="Bottom" Rows="3" Margin="0,3,0,0">
                                 <UniformGrid.Resources>
@@ -139,7 +139,17 @@
                                     </Button.Triggers>
                                 </Button>
                             </UniformGrid>
-                            <ListBox ItemsSource="{Binding Source={StaticResource GroupsCollection}}" SelectedItem="{Binding GroupSelected}" SelectedIndex="0">
+                            <ListBox ItemsSource="{Binding Source={StaticResource GroupsCollection}}" SelectedItem="{Binding GroupSelected}" SelectedIndex="0"
+                                     VirtualizingPanel.CacheLength="10"
+                                     VirtualizingPanel.IsVirtualizing="True"
+                                     VirtualizingPanel.IsContainerVirtualizable="True"
+                                     VirtualizingPanel.VirtualizationMode="Standard">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="decanat:Group">
                                         <StackPanel Orientation="Horizontal">

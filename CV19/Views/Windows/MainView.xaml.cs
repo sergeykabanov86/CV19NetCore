@@ -25,7 +25,7 @@ namespace CV19.Views.Windows
 
         private void GroupsCollection_OnFilter(object sender, FilterEventArgs e)
         {
-            var filterText = tbGroupFIlter.Text;
+            var filterText = tbGroupFilter.Text;
             if (!(e.Item is Group group)) return;
             if (group.Name is null) return;
             if (string.IsNullOrEmpty(filterText)) return;
@@ -39,7 +39,7 @@ namespace CV19.Views.Windows
 
         }
 
-        private void TbGroupFIlter_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void tbGroupFilter_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             var tb = sender as TextBox;
             var collection = (CollectionViewSource)tb.FindResource("GroupsCollection");
