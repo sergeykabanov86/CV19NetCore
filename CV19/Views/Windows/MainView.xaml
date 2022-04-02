@@ -9,6 +9,7 @@
         xmlns:vm="clr-namespace:CV19.ViewModels"
         xmlns:models="clr-namespace:CV19.Models"
         xmlns:decanat="clr-namespace:CV19.Models.Decanat"
+        xmlns:dir="clr-namespace:CV19.ViewModels.Directories"
         xmlns:cmd="clr-namespace:CV19.Infrastructure.Commands"
         xmlns:oxy="http://oxyplot.org/wpf" 
         xmlns:fa="http://schemas.fontawesome.com/icons/"
@@ -48,7 +49,7 @@
         <ToolBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"></ToolBar>
 
 
-        <TabControl Grid.Row="2" Grid.Column="1" SelectedIndex ="1">
+        <TabControl Grid.Row="2" Grid.Column="1" SelectedIndex ="5">
             <TabItem Header="Main" Visibility="Collapsed"></TabItem>
 
             <TabItem Header="Students" Height="20" VerticalAlignment="Bottom">
@@ -243,7 +244,7 @@
                                 </BeginStoryboard>
                             </EventTrigger>
                         </Button.Triggers>
-                        
+
                     </Button>
 
                     <Button x:Name="btnColorAnimation" Content="Color Background">
@@ -267,6 +268,45 @@
                     </Button>
 
                 </WrapPanel>
+            </TabItem>
+
+            <TabItem Header="Directories">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="250" />
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Column="0" Header="Directories">
+                        <!--<ListBox ItemsSource="{Binding DiskRoot.DirectoryItems}" SelectedItem="{Binding DirectorySelected}" SelectedIndex="15">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="dir:DirectoryViewModel">
+                                    <DockPanel HorizontalAlignment="Stretch">
+                                        <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" ToolTip="{Binding CreationTime, StringFormat=dd.MM.yyyy hh:mm:ss}" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>-->
+                        <TreeView ItemsSource="{Binding DiskRoot.DirectoryItems}">
+                            <TreeView.ItemTemplate>
+                                <!--<DataTemplate DataType="dir:DirectoryViewModel">
+                                    <DockPanel HorizontalAlignment="Stretch">
+                                        <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" ToolTip="{Binding CreationTime, StringFormat=dd.MM.yyyy hh:mm:ss}" />
+                                    </DockPanel>
+                                </DataTemplate>-->
+                                <HierarchicalDataTemplate DataType="dir:DirectoryViewModel"
+                                                          ItemsSource="{Binding DirectoryItems}">
+                                    <StackPanel Orientation="Horizontal" >
+                                        <fa:SvgAwesome Icon="Solid_Folder" MaxHeight="12" Margin="0,0,5,0" />
+                                        <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" ToolTip="{Binding CreationTime, StringFormat=dd.MM.yyyy hh:mm:ss}" />
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </GroupBox>
+                    <GroupBox Grid.Column="1" Header="Files">
+                        <ListBox ItemsSource="{Binding DirectorySelected.DirectoryItems}" DisplayMemberPath="Name"></ListBox>
+                    </GroupBox>
+                </Grid>
             </TabItem>
 
         </TabControl>

@@ -9,6 +9,8 @@ using System.Windows.Data;
 using CV19.ViewModels.Base;
 using CV19.Infrastructure.Commands;
 using CV19.Models.Decanat;
+using CV19.ViewModels.Directories;
+
 using OxyPlot;
 using DataPoint = CV19.Models.DataPoint;
 
@@ -95,6 +97,22 @@ namespace CV19.ViewModels
 
         #endregion CollectionViewSource _GroupSelectedView - Description
         #endregion Students
+
+        #region Directories
+
+        public DirectoryViewModel DiskRoot { get; } = new DirectoryViewModel("c:\\");
+
+        #region DirectoryViewModel DirectorySelected - Выбранная директория
+
+        private DirectoryViewModel _DirectorySelected;
+        public DirectoryViewModel DirectorySelected
+        {
+            get => _DirectorySelected;
+            set => SetProperty(ref _DirectorySelected, value);
+        }
+
+        #endregion DirectoryViewModel _DirectorySelected - Выбранная директория
+        #endregion Directories
 
         public ObservableCollection<object> CompositeCollection { get; }
 
