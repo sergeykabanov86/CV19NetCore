@@ -286,21 +286,23 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>-->
-                        <TreeView ItemsSource="{Binding DiskRoot.DirectoryItems}">
-                            <TreeView.ItemTemplate>
-                                <!--<DataTemplate DataType="dir:DirectoryViewModel">
-                                    <DockPanel HorizontalAlignment="Stretch">
-                                        <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" ToolTip="{Binding CreationTime, StringFormat=dd.MM.yyyy hh:mm:ss}" />
-                                    </DockPanel>
-                                </DataTemplate>-->
-                                <HierarchicalDataTemplate DataType="dir:DirectoryViewModel"
-                                                          ItemsSource="{Binding DirectoryItems}">
-                                    <StackPanel Orientation="Horizontal" >
-                                        <fa:SvgAwesome Icon="Solid_Folder" MaxHeight="12" Margin="0,0,5,0" />
-                                        <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" ToolTip="{Binding CreationTime, StringFormat=dd.MM.yyyy hh:mm:ss}" />
-                                    </StackPanel>
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
+                        <GroupBox.Resources>
+                            <HierarchicalDataTemplate DataType="{x:Type dir:DirectoryViewModel}"
+                                                      ItemsSource="{Binding DirectoryItems}">
+                                <StackPanel Orientation="Horizontal" >
+                                    <fa:SvgAwesome Icon="Solid_Folder" Foreground="Orange" MaxHeight="12" Margin="0,0,5,0" />
+                                    <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" ToolTip="{Binding CreationTime, StringFormat=dd.MM.yyyy hh:mm:ss}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type dir:FileViewModel}">
+                                <StackPanel Orientation="Horizontal" >
+                                    <fa:SvgAwesome Icon="Regular_File" Foreground="Blue" MaxHeight="12" Margin="0,0,5,0" />
+                                    <TextBlock DockPanel.Dock="Left" Text="{Binding Name}" ToolTip="{Binding CreationTime, StringFormat=dd.MM.yyyy hh:mm:ss}" />
+                                </StackPanel>
+                            </HierarchicalDataTemplate>
+                        </GroupBox.Resources>
+                        <TreeView ItemsSource="{Binding DiskRoot.DirectoryItems}" SelectedValuePath="{Binding DirectorySelected}">
+                           
                         </TreeView>
                     </GroupBox>
                     <GroupBox Grid.Column="1" Header="Files">
