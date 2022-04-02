@@ -15,12 +15,12 @@ namespace CV19
     /// </summary>
     public partial class App : Application
     {
-        public bool IsVisual { get; set; } = true;
+        public static bool IsDesignMode { get; set; } = true;
 
-        protected override void OnLoadCompleted(NavigationEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnLoadCompleted(e);
-            IsVisual = false;
+            IsDesignMode = false;
+            base.OnStartup(e);
         }
     }
 }

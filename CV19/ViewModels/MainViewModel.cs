@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 using System.Linq;
+using System.Windows;
+using System.Windows.Data;
 using CV19.ViewModels.Base;
 using CV19.Infrastructure.Commands;
-
-using CV19.Models;
 using CV19.Models.Decanat;
+using CV19.ViewModels.Directories;
+
+using OxyPlot;
+using DataPoint = CV19.Models.DataPoint;
 
 namespace CV19.ViewModels
 {
@@ -34,12 +39,80 @@ namespace CV19.ViewModels
 
         #region GroupSelected - Выбранная группа
         private Group _GroupSelected;
-        public Group GroupSelected { get => _GroupSelected; set => SetProperty(ref _GroupSelected, value); }
+        public Group GroupSelected
+        {
+            get => _GroupSelected;
+            set
+            {
+                if (SetProperty(ref _GroupSelected, value))
+                {
+                    _GroupSelectedView.Source = value?.Students;
+                    OnPropertyChanged(nameof(GroupSelectedView));
+                }
+            }
+        }
+
         #endregion GroupSelected
 
 
+        #region CollectionViewSource GroupSelectedView - Description
 
+        #region string StudentFilterText - Description
+
+        private string _StudentFilterText;
+        public string StudentFilterText
+        {
+            get => _StudentFilterText;
+            set
+            {
+                if (!SetProperty(ref _StudentFilterText, value)) return;
+                GroupSelectedView.Refresh();
+            }
+        }
+
+        #endregion string _StudentFilterText - Description
+
+        private readonly System.Windows.Data.CollectionViewSource _GroupSelectedView = new CollectionViewSource();
+        public ICollectionView GroupSelectedView
+        {
+            get => _GroupSelectedView.View;
+        }
+
+        //Реализация фильтра
+        private void OnGroupSelectedView_Filter(object sender, FilterEventArgs e)
+        {
+            var txt = StudentFilterText;
+            if (!(e.Item is Student student)) return;
+            if (string.IsNullOrEmpty(txt)) return;
+            if (student.Name is null || student.Surname is null || student.Patronomic is null) return;
+            txt = txt.Trim();
+
+            if (student.Name.Contains(txt, StringComparison.OrdinalIgnoreCase) || student.Surname.Contains(txt, StringComparison.OrdinalIgnoreCase) ||
+                student.Patronomic.Contains(txt, StringComparison.OrdinalIgnoreCase) ||
+                (student.Description != null && student.Description.Contains(txt, StringComparison.OrdinalIgnoreCase)))
+                return;
+
+            e.Accepted = false;
+        }
+
+        #endregion CollectionViewSource _GroupSelectedView - Description
         #endregion Students
+
+        #region Directories
+
+        public DirectoryViewModel DiskRoot { get; } = new DirectoryViewModel("c:\\");
+
+        #region DirectoryViewModel DirectorySelected - Выбранная директория
+
+        private DirectoryViewModel _DirectorySelected;
+        public DirectoryViewModel DirectorySelected
+        {
+            get => _DirectorySelected;
+            set => SetProperty(ref _DirectorySelected, value);
+        }
+
+        #endregion DirectoryViewModel _DirectorySelected - Выбранная директория
+        #endregion Directories
 
         public ObservableCollection<object> CompositeCollection { get; }
 
@@ -141,15 +214,18 @@ namespace CV19.ViewModels
             #region Students
 
             var studentIdx = 0;
-            var groups = Enumerable.Range(1, 20)
+            var maxGroups = App.IsDesignMode ? 5 : 100;
+            var maxStudent = App.IsDesignMode ? 5 : 15;
+
+            var groups = Enumerable.Range(1, maxGroups)
                                    .Select(i => new Group
                                    {
                                        Name = $"Группа {i}",
-                                       Students = Enumerable.Range(1, 10)
+                                       Students = Enumerable.Range(1, maxStudent)
                                      .Select(i => new Student
                                      {
-                                         Name = $"Name: {studentIdx}",
-                                         Surname = $"Surname: {studentIdx}",
+                                         Name = $"Name_{studentIdx}",
+                                         Surname = $"Surname_{studentIdx}",
                                          Patronomic = $"Patronomic: {studentIdx++}",
                                          Birthday = DateTime.Now.AddDays(i * (-1) + 1),
                                          Rating = 0
@@ -157,6 +233,10 @@ namespace CV19.ViewModels
                                    });
 
             Groups = new ObservableCollection<Group>(groups);
+
+            _GroupSelectedView.Filter += OnGroupSelectedView_Filter;
+            _GroupSelectedView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Descending));
+            _GroupSelectedView.GroupDescriptions.Add(new PropertyGroupDescription("Name"));
 
             #region StudentCommands
 
@@ -177,6 +257,8 @@ namespace CV19.ViewModels
 
             #endregion CompositeCollection
         }
+
+
 
         #endregion Constructors
 
